@@ -1,0 +1,12 @@
+- op: replace
+  path: /spec/template/spec/containers
+  value: 
+    - name: nest
+      image: test:latest
+      imagePullPolicy: IfNotPresent
+      # env:
+      # - name: WRAPPER_ENABLED
+      #   value: "false"
+
+- op: remove
+  path: /spec/template/spec/affinity

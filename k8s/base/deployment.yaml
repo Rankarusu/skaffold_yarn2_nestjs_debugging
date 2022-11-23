@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-api
+  labels:
+    app: test
+    component: api
+spec:
+  selector: 
+    matchLabels:
+      app: test
+      component: api
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: test
+        component: api
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                app: test
+                component: api
+            topologyKey: "kubernetes.io/hostname"
+      containers:
+      - name: nest
+        image: dockerimage:snapshot
+        imagePullPolicy: Always
+        resources:
+          requests:
+            memory: "50Mi"
+            cpu: "0.05"
+            ephemeral-storage: "100Mi"
+          limits:
+            memory: "100Mi"
+            cpu: "0.1"
+            ephemeral-storage: "200Mi"

@@ -1,0 +1,26 @@
+apiVersion: skaffold/v2beta29
+kind: Config
+metadata:
+  name: test
+build:
+  local:
+    push: false
+    concurrency: 0 #build as much parallel as possible
+  artifacts:
+    - image: test
+      context: .
+      docker:
+        dockerfile: docker/Dockerfile
+        target: devserver
+      sync:
+        manual:
+          - src: 'src/**/*'
+            dest: '.'
+      hooks:
+        before:
+          - command: ['sh', '-c', 'yarn install']
+deploy:
+  kustomize:
+    paths:
+      - k8s/overlays/docker-desktop
+  kubeContext: docker-desktop
